@@ -50,4 +50,21 @@ public class CollectionBox {
         return balance.isEmpty();
     }
 
+    public void addMoney(Currency currency, BigDecimal amount) {
+        if (currency == null || amount == null) {
+            throw new IllegalArgumentException("Currency and amount cannot be null");
+        }
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
+        balance.merge(currency, amount, BigDecimal::add);
+    }
+
+    public BigDecimal getBalanceForCurrency(Currency currency) {
+        if (currency == null) {
+            throw new IllegalArgumentException("Currency cannot be null");
+        }
+        return balance.getOrDefault(currency, BigDecimal.ZERO);
+    }
+
 }
