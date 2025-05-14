@@ -3,8 +3,10 @@ package com.recruitment.fund_box.domain;
 import com.recruitment.fund_box.enums.Currency;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
 @Entity
 public class FundraisingEvent {
     @Id
@@ -12,10 +14,12 @@ public class FundraisingEvent {
     private Long id;
     private String name;
     private Currency accountCurrency;
+    
+    @Column(nullable = false)
+    private BigDecimal funds = BigDecimal.ZERO;
+    
     @OneToMany(mappedBy = "fundraisingEvent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-
     private List<CollectionBox> collectionBoxes = new ArrayList<>();
-
 
     public Long getId() {
         return id;
@@ -39,6 +43,14 @@ public class FundraisingEvent {
 
     public void setAccountCurrency(Currency accountCurrency) {
         this.accountCurrency = accountCurrency;
+    }
+
+    public BigDecimal getFunds() {
+        return funds;
+    }
+
+    public void setFunds(BigDecimal funds) {
+        this.funds = funds;
     }
 
     public List<CollectionBox> getCollectionBoxes() {
