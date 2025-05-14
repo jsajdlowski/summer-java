@@ -11,7 +11,7 @@ public class CollectionBox {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "collection_box_balance", joinColumns = @JoinColumn(name = "collection_box_id"))
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "currency")
