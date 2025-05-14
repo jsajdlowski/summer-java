@@ -54,8 +54,8 @@ public class CollectionBox {
         if (currency == null || amount == null) {
             throw new IllegalArgumentException("Currency and amount cannot be null");
         }
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Amount cannot be negative");
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Amount must be positive");
         }
         balance.merge(currency, amount, BigDecimal::add);
     }
