@@ -1,8 +1,10 @@
 package com.recruitment.fund_box.controller;
 
+import com.recruitment.fund_box.dto.request.AssignCollectionBoxRequest;
 import com.recruitment.fund_box.dto.request.FundraisingEventRequest;
 import com.recruitment.fund_box.dto.response.FinancialReportResponse;
 import com.recruitment.fund_box.dto.response.FundraisingEventResponse;
+import com.recruitment.fund_box.service.CollectionBoxService;
 import com.recruitment.fund_box.service.FundraisingEventService;
 import jakarta.validation.Valid;
 
@@ -16,14 +18,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/event")
 public class FundraisingEventController {
     private final FundraisingEventService fundraisingEventService;
+    private final CollectionBoxService collectionBoxService;
 
-    public FundraisingEventController(FundraisingEventService fundraisingEventService) {
+    public FundraisingEventController(
+            FundraisingEventService fundraisingEventService,
+            CollectionBoxService collectionBoxService) {
         this.fundraisingEventService = fundraisingEventService;
+        this.collectionBoxService = collectionBoxService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<FundraisingEventResponse> getEventById(@PathVariable Long id) {
-        FundraisingEventResponse response = fundraisingEventService.getFundraisingEvent(id);
+    @GetMapping("/{eventId}")
+    public ResponseEntity<FundraisingEventResponse> getEventById(@PathVariable Long eventId) {
+        FundraisingEventResponse response = fundraisingEventService.getFundraisingEvent(eventId);
         return ResponseEntity.ok(response);
     }
 
@@ -38,5 +44,13 @@ public class FundraisingEventController {
     public ResponseEntity<List<FinancialReportResponse>> getFinancialReport() {
         List<FinancialReportResponse> report = fundraisingEventService.getFinancialReport();
         return ResponseEntity.ok(report);
+    }
+
+    @PostMapping("/{eventId}/assign")
+    public ResponseEntity<Void> assignCollectionBox(
+            @PathVariable Long eventId,
+            @Valid @RequestBody AssignCollectionBoxRequest request) {
+        collectionBoxService.assignCollectionBox(request.boxId(), eventId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

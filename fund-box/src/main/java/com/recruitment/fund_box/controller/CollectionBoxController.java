@@ -31,29 +31,23 @@ public class CollectionBoxController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCollectionBox(@PathVariable Long id) {
-        collectionBoxService.removeCollectionBox(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{boxId}/assign/{eventId}")
-    public ResponseEntity<Void> assignToEvent(@PathVariable Long boxId, @PathVariable Long eventId) {
-        collectionBoxService.assignCollectionBox(boxId, eventId);
-        return ResponseEntity.ok().build(); 
-    }
-
-    @PostMapping("/{id}/donate")
+    @PostMapping("/{boxId}/donate")
     public ResponseEntity<Void> makeDonation(
-            @PathVariable Long id,
+            @PathVariable Long boxId,
             @Valid @RequestBody DonationRequest request) {
-        collectionBoxService.makeDonation(id, request.currency(), request.amount());
-        return ResponseEntity.ok().build();
+        collectionBoxService.makeDonation(boxId, request.currency(), request.amount());
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
-    @PostMapping("/{id}/transfer")
-    public ResponseEntity<Void> transferFunds(@PathVariable Long id) {
-        collectionBoxService.transferFunds(id);
-        return ResponseEntity.ok().build();
+    @PostMapping("/{boxId}/transfer")
+    public ResponseEntity<Void> transferFunds(@PathVariable Long boxId) {
+        collectionBoxService.transferFunds(boxId);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
+
+    @DeleteMapping("/{boxId}")
+    public ResponseEntity<Void> deleteCollectionBox(@PathVariable Long boxId) {
+        collectionBoxService.removeCollectionBox(boxId);
+        return ResponseEntity.noContent().build();
     }
 }
