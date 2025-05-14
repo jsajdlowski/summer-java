@@ -2,6 +2,7 @@ package com.recruitment.fund_box.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -54,6 +55,28 @@ public class GlobalExceptionHandler {
             HttpStatus.INTERNAL_SERVER_ERROR, 
             "An unexpected error occurred: " + ex.getMessage()
         );
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, Object>> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        String errorMessage = ex.getMessage();
+        
+        if (errorMessage != null && errorMessage.contains("Cannot deserialize value of type")) {
+            String simplifiedMessage = "Invalid value provided. ";
+            
+            if (errorMessage.contains("not one of the values accepted for Enum class")) {
+                int startIndex = errorMessage.indexOf("[");
+                int endIndex = errorMessage.indexOf("]");
+                if (startIndex > 0 && endIndex > startIndex) {
+                    String acceptedValues = errorMessage.substring(startIndex, endIndex + 1);
+                    simplifiedMessage += "Accepted values are: " + acceptedValues;
+                }
+            }
+            
+            return createErrorResponse(HttpStatus.BAD_REQUEST, simplifiedMessage);
+        }
+
+        return createErrorResponse(HttpStatus.BAD_REQUEST, "Invalid request format: " + ex.getMessage());
     }
 
     private ResponseEntity<Map<String, Object>> createErrorResponse(HttpStatus status, String message) {
