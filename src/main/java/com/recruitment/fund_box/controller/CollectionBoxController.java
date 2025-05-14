@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/box")
-@Tag(name = "Collection Box", description = "Collection Box management APIs")
+@Tag(name = "Collection Box", description = "Collection Box management")
 public class CollectionBoxController {
     private CollectionBoxService collectionBoxService;
 

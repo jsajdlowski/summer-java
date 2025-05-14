@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/event")
-@Tag(name = "Fundraising Event", description = "Fundraising Event management APIs")
+@Tag(name = "Fundraising Event", description = "Fundraising Event management")
 public class FundraisingEventController {
     private final FundraisingEventService fundraisingEventService;
     private final CollectionBoxService collectionBoxService;
