@@ -2,6 +2,8 @@ package com.recruitment.fund_box.domain;
 
 import com.recruitment.fund_box.enums.Currency;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,7 +14,13 @@ public class FundraisingEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @NotBlank(message = "Name is required")
+    @Column(nullable = false)
     private String name;
+    
+    @NotNull(message = "Account currency is required")
+    @Column(nullable = false)
     private Currency accountCurrency;
     
     @Column(nullable = false)
@@ -34,6 +42,9 @@ public class FundraisingEvent {
     }
 
     public void setName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Fundraising event name cannot be empty");
+        }
         this.name = name;
     }
 
@@ -42,6 +53,9 @@ public class FundraisingEvent {
     }
 
     public void setAccountCurrency(Currency accountCurrency) {
+        if (accountCurrency == null) {
+            throw new IllegalArgumentException("Account currency cannot be null");
+        }
         this.accountCurrency = accountCurrency;
     }
 
